@@ -23,7 +23,7 @@ contract MerkleAirdropTest is Test {
         token = new AnotherToken();
         airdrop = new MerkleAirdrop(ROOT, token);
         (user, userPk) = makeAddrAndKey("User");
-        token.mint(address(airdrop), amount);
+        token.mint(address(airdrop), amount * 4);
         console.log("User Address :%s", user);
     }
 
@@ -38,5 +38,12 @@ contract MerkleAirdropTest is Test {
         console.log("Ending Balance: %s", endingBalance);
 
         assertEq(endingBalance - startingBalance, amount);
+    }
+
+    function testUserClaimTwice() public {
+        testUserClaim();
+        vm.prank(user);
+        vm.expectRevert();
+        airdrop.claim(user, amount, PROOF);
     }
 }
