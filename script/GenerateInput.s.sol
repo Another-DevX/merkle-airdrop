@@ -17,7 +17,7 @@ contract GeerateInput is Script {
         whitelist[1] = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
         whitelist[2] = "0x2ea3970Ed82D5b30be821FAAD4a731D35964F7dd";
         whitelist[3] = "0xf6dBa02C01AF48Cf926579F77C9f874Ca640D91D";
-        whitelist[4] = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+        whitelist[4] = "0x5cb738DAe833Ec21fe65ae1719fAd8ab8cE7f23D";
         count = whitelist.length;
         string memory input = _createJSON();
         vm.writeFile(string.concat(vm.projectRoot(), inputPath), input);
