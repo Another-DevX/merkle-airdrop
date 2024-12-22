@@ -17,11 +17,13 @@ contract MerkleAirdropTest is Test {
     bytes32[] public PROOF = [ZERO_PROOF, ZERO_PROOF, PROOF_1];
     address user;
     uint256 userPk;
+    address gasPayer;
 
     function setUp() public {
         DeployMerkleAidrop deploy = new DeployMerkleAidrop();
         (airdrop, token) = deploy.deployMerkleAirdrop();
         (user, userPk) = makeAddrAndKey("User");
+        gasPayer = makeAddr("gasPayer");
     }
 
     function testUserClaim() public {
@@ -42,5 +44,15 @@ contract MerkleAirdropTest is Test {
         vm.prank(user);
         vm.expectRevert();
         airdrop.claim(user, amount, PROOF);
+    }
+
+    function testUserClaimInBehalfAnotherUser() public {
+
+        vm.prank(user);
+        bytes32 digest = airdrop.getMessageDigest(user, amount);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(userPk, digest);
+
+        vm.prank(gasPayer);
+        airdrop.claim(user, amount, PROOF, v, r, s);
     }
 }
